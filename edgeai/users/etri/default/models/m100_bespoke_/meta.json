@@ -1,0 +1,1 @@
+{"inference_time": -1, "accuracy": 11.0, "task_name": "dummy", "num_parameters": 1, "status": "new", "model_path": "/home/jongryul/edgeai_web/web_gui_20230216/edgeai/users/etri/default/models/m100_bespoke_/model.h5", "lib": ["utils"]}

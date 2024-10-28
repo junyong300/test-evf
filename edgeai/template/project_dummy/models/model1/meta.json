@@ -1,0 +1,9 @@
+{
+	"inference_time": 10,
+	"accuracy": 10,
+	"task_name": "dummy",
+	"num_parameters": 1,
+	"status": "uploaded",
+	"model_path": "dummy.h5",
+	"lib": ["utils"]
+}

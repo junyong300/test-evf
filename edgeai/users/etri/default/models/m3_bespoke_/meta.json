@@ -1,0 +1,11 @@
+{
+    "inference_time": 10.0,
+    "accuracy": 40.0,
+    "task_name": "dummy",
+    "num_parameters": 1,
+    "status": "queried",
+    "model_path": "/Users/jaehong/dev/etri_edge_2022/2_web_gui/edgeai/users/etri/default/models/m3_bespoke_/model.h5",
+    "lib": [
+        "utils"
+    ]
+}

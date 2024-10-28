@@ -1,0 +1,8 @@
+{
+    "model_name": "m100",
+    "tag": "",
+    "task": "t2",
+    "method": "bespoke",
+    "gpus": "1",
+    "mode": "search"
+}

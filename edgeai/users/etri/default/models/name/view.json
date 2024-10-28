@@ -1,0 +1,4652 @@
+{
+    "layers": [
+        {
+            "name": "input_1",
+            "classname": "InputLayer",
+            "idx": 0,
+            "output_shape": [
+                [
+                    "?",
+                    224,
+                    224,
+                    3
+                ]
+            ],
+            "inbound": []
+        },
+        {
+            "name": "rescaling",
+            "classname": "Rescaling",
+            "idx": 1,
+            "output_shape": [
+                [
+                    "?",
+                    224,
+                    224,
+                    3
+                ]
+            ],
+            "inbound": [
+                [
+                    "input_1",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "normalization",
+            "classname": "Normalization",
+            "idx": 2,
+            "output_shape": [
+                [
+                    "?",
+                    224,
+                    224,
+                    3
+                ]
+            ],
+            "inbound": [
+                [
+                    "rescaling",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "tf.math.truediv",
+            "classname": "TFOpLambda",
+            "idx": 3,
+            "output_shape": [
+                [
+                    "?",
+                    224,
+                    224,
+                    3
+                ]
+            ],
+            "inbound": [
+                [
+                    "normalization",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "stem_conv_pad",
+            "classname": "ZeroPadding2D",
+            "idx": 4,
+            "output_shape": [
+                [
+                    "?",
+                    225,
+                    225,
+                    3
+                ]
+            ],
+            "inbound": [
+                [
+                    "tf.math.truediv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "stem_conv",
+            "classname": "Conv2D",
+            "idx": 5,
+            "output_shape": [
+                [
+                    "?",
+                    112,
+                    112,
+                    32
+                ]
+            ],
+            "inbound": [
+                [
+                    "stem_conv_pad",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "stem_bn",
+            "classname": "BatchNormalization",
+            "idx": 6,
+            "output_shape": [
+                [
+                    "?",
+                    112,
+                    112,
+                    32
+                ]
+            ],
+            "inbound": [
+                [
+                    "stem_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "stem_activation",
+            "classname": "Activation",
+            "idx": 7,
+            "output_shape": [
+                [
+                    "?",
+                    112,
+                    112,
+                    32
+                ]
+            ],
+            "inbound": [
+                [
+                    "stem_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block1a_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 8,
+            "output_shape": [
+                [
+                    "?",
+                    112,
+                    112,
+                    32
+                ]
+            ],
+            "inbound": [
+                [
+                    "stem_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block1a_bn",
+            "classname": "BatchNormalization",
+            "idx": 9,
+            "output_shape": [
+                [
+                    "?",
+                    112,
+                    112,
+                    32
+                ]
+            ],
+            "inbound": [
+                [
+                    "block1a_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block1a_activation",
+            "classname": "Activation",
+            "idx": 10,
+            "output_shape": [
+                [
+                    "?",
+                    112,
+                    112,
+                    32
+                ]
+            ],
+            "inbound": [
+                [
+                    "block1a_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block1a_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 11,
+            "output_shape": [
+                [
+                    "?",
+                    32
+                ]
+            ],
+            "inbound": [
+                [
+                    "block1a_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block1a_se_reshape",
+            "classname": "Reshape",
+            "idx": 12,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    32
+                ]
+            ],
+            "inbound": [
+                [
+                    "block1a_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block1a_se_reduce",
+            "classname": "Conv2D",
+            "idx": 13,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    8
+                ]
+            ],
+            "inbound": [
+                [
+                    "block1a_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block1a_se_expand",
+            "classname": "Conv2D",
+            "idx": 14,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    32
+                ]
+            ],
+            "inbound": [
+                [
+                    "block1a_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block1a_se_excite",
+            "classname": "Multiply",
+            "idx": 15,
+            "output_shape": [
+                [
+                    "?",
+                    112,
+                    112,
+                    32
+                ]
+            ],
+            "inbound": [
+                [
+                    "block1a_activation",
+                    0
+                ],
+                [
+                    "block1a_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block1a_project_conv",
+            "classname": "Conv2D",
+            "idx": 16,
+            "output_shape": [
+                [
+                    "?",
+                    112,
+                    112,
+                    16
+                ]
+            ],
+            "inbound": [
+                [
+                    "block1a_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block1a_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 17,
+            "output_shape": [
+                [
+                    "?",
+                    112,
+                    112,
+                    16
+                ]
+            ],
+            "inbound": [
+                [
+                    "block1a_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_expand_conv",
+            "classname": "Conv2D",
+            "idx": 18,
+            "output_shape": [
+                [
+                    "?",
+                    112,
+                    112,
+                    96
+                ]
+            ],
+            "inbound": [
+                [
+                    "block1a_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 19,
+            "output_shape": [
+                [
+                    "?",
+                    112,
+                    112,
+                    96
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_expand_activation",
+            "classname": "Activation",
+            "idx": 20,
+            "output_shape": [
+                [
+                    "?",
+                    112,
+                    112,
+                    96
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_dwconv_pad",
+            "classname": "ZeroPadding2D",
+            "idx": 21,
+            "output_shape": [
+                [
+                    "?",
+                    113,
+                    113,
+                    96
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 22,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    96
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_dwconv_pad",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_bn",
+            "classname": "BatchNormalization",
+            "idx": 23,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    96
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_activation",
+            "classname": "Activation",
+            "idx": 24,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    96
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 25,
+            "output_shape": [
+                [
+                    "?",
+                    96
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_se_reshape",
+            "classname": "Reshape",
+            "idx": 26,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    96
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_se_reduce",
+            "classname": "Conv2D",
+            "idx": 27,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    4
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_se_expand",
+            "classname": "Conv2D",
+            "idx": 28,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    96
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_se_excite",
+            "classname": "Multiply",
+            "idx": 29,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    96
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_activation",
+                    0
+                ],
+                [
+                    "block2a_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_project_conv",
+            "classname": "Conv2D",
+            "idx": 30,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    24
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2a_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 31,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    24
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_expand_conv",
+            "classname": "Conv2D",
+            "idx": 32,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2a_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 33,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_expand_activation",
+            "classname": "Activation",
+            "idx": 34,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 35,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_bn",
+            "classname": "BatchNormalization",
+            "idx": 36,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_activation",
+            "classname": "Activation",
+            "idx": 37,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 38,
+            "output_shape": [
+                [
+                    "?",
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_se_reshape",
+            "classname": "Reshape",
+            "idx": 39,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_se_reduce",
+            "classname": "Conv2D",
+            "idx": 40,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    6
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_se_expand",
+            "classname": "Conv2D",
+            "idx": 41,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_se_excite",
+            "classname": "Multiply",
+            "idx": 42,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_activation",
+                    0
+                ],
+                [
+                    "block2b_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_project_conv",
+            "classname": "Conv2D",
+            "idx": 43,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    24
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 44,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    24
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_drop",
+            "classname": "Dropout",
+            "idx": 45,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    24
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block2b_add",
+            "classname": "Add",
+            "idx": 46,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    24
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_drop",
+                    0
+                ],
+                [
+                    "block2a_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_expand_conv",
+            "classname": "Conv2D",
+            "idx": 47,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block2b_add",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 48,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_expand_activation",
+            "classname": "Activation",
+            "idx": 49,
+            "output_shape": [
+                [
+                    "?",
+                    56,
+                    56,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_dwconv_pad",
+            "classname": "ZeroPadding2D",
+            "idx": 50,
+            "output_shape": [
+                [
+                    "?",
+                    59,
+                    59,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 51,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_dwconv_pad",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_bn",
+            "classname": "BatchNormalization",
+            "idx": 52,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_activation",
+            "classname": "Activation",
+            "idx": 53,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 54,
+            "output_shape": [
+                [
+                    "?",
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_se_reshape",
+            "classname": "Reshape",
+            "idx": 55,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_se_reduce",
+            "classname": "Conv2D",
+            "idx": 56,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    6
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_se_expand",
+            "classname": "Conv2D",
+            "idx": 57,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_se_excite",
+            "classname": "Multiply",
+            "idx": 58,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    144
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_activation",
+                    0
+                ],
+                [
+                    "block3a_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_project_conv",
+            "classname": "Conv2D",
+            "idx": 59,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    40
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3a_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 60,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    40
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_expand_conv",
+            "classname": "Conv2D",
+            "idx": 61,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3a_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 62,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_expand_activation",
+            "classname": "Activation",
+            "idx": 63,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 64,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_bn",
+            "classname": "BatchNormalization",
+            "idx": 65,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_activation",
+            "classname": "Activation",
+            "idx": 66,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 67,
+            "output_shape": [
+                [
+                    "?",
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_se_reshape",
+            "classname": "Reshape",
+            "idx": 68,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_se_reduce",
+            "classname": "Conv2D",
+            "idx": 69,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    10
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_se_expand",
+            "classname": "Conv2D",
+            "idx": 70,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_se_excite",
+            "classname": "Multiply",
+            "idx": 71,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_activation",
+                    0
+                ],
+                [
+                    "block3b_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_project_conv",
+            "classname": "Conv2D",
+            "idx": 72,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    40
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 73,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    40
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_drop",
+            "classname": "Dropout",
+            "idx": 74,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    40
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block3b_add",
+            "classname": "Add",
+            "idx": 75,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    40
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_drop",
+                    0
+                ],
+                [
+                    "block3a_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_expand_conv",
+            "classname": "Conv2D",
+            "idx": 76,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block3b_add",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 77,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_expand_activation",
+            "classname": "Activation",
+            "idx": 78,
+            "output_shape": [
+                [
+                    "?",
+                    28,
+                    28,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_dwconv_pad",
+            "classname": "ZeroPadding2D",
+            "idx": 79,
+            "output_shape": [
+                [
+                    "?",
+                    29,
+                    29,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 80,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_dwconv_pad",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_bn",
+            "classname": "BatchNormalization",
+            "idx": 81,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_activation",
+            "classname": "Activation",
+            "idx": 82,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 83,
+            "output_shape": [
+                [
+                    "?",
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_se_reshape",
+            "classname": "Reshape",
+            "idx": 84,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_se_reduce",
+            "classname": "Conv2D",
+            "idx": 85,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    10
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_se_expand",
+            "classname": "Conv2D",
+            "idx": 86,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_se_excite",
+            "classname": "Multiply",
+            "idx": 87,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    240
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_activation",
+                    0
+                ],
+                [
+                    "block4a_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_project_conv",
+            "classname": "Conv2D",
+            "idx": 88,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    80
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4a_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 89,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    80
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_expand_conv",
+            "classname": "Conv2D",
+            "idx": 90,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4a_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 91,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_expand_activation",
+            "classname": "Activation",
+            "idx": 92,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 93,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_bn",
+            "classname": "BatchNormalization",
+            "idx": 94,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_activation",
+            "classname": "Activation",
+            "idx": 95,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 96,
+            "output_shape": [
+                [
+                    "?",
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_se_reshape",
+            "classname": "Reshape",
+            "idx": 97,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_se_reduce",
+            "classname": "Conv2D",
+            "idx": 98,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    20
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_se_expand",
+            "classname": "Conv2D",
+            "idx": 99,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_se_excite",
+            "classname": "Multiply",
+            "idx": 100,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_activation",
+                    0
+                ],
+                [
+                    "block4b_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_project_conv",
+            "classname": "Conv2D",
+            "idx": 101,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    80
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 102,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    80
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_drop",
+            "classname": "Dropout",
+            "idx": 103,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    80
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4b_add",
+            "classname": "Add",
+            "idx": 104,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    80
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_drop",
+                    0
+                ],
+                [
+                    "block4a_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_expand_conv",
+            "classname": "Conv2D",
+            "idx": 105,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4b_add",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 106,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_expand_activation",
+            "classname": "Activation",
+            "idx": 107,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 108,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_bn",
+            "classname": "BatchNormalization",
+            "idx": 109,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_activation",
+            "classname": "Activation",
+            "idx": 110,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 111,
+            "output_shape": [
+                [
+                    "?",
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_se_reshape",
+            "classname": "Reshape",
+            "idx": 112,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_se_reduce",
+            "classname": "Conv2D",
+            "idx": 113,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    20
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_se_expand",
+            "classname": "Conv2D",
+            "idx": 114,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_se_excite",
+            "classname": "Multiply",
+            "idx": 115,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_activation",
+                    0
+                ],
+                [
+                    "block4c_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_project_conv",
+            "classname": "Conv2D",
+            "idx": 116,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    80
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 117,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    80
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_drop",
+            "classname": "Dropout",
+            "idx": 118,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    80
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block4c_add",
+            "classname": "Add",
+            "idx": 119,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    80
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_drop",
+                    0
+                ],
+                [
+                    "block4b_add",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5a_expand_conv",
+            "classname": "Conv2D",
+            "idx": 120,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block4c_add",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5a_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 121,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5a_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5a_expand_activation",
+            "classname": "Activation",
+            "idx": 122,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5a_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5a_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 123,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5a_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5a_bn",
+            "classname": "BatchNormalization",
+            "idx": 124,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5a_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5a_activation",
+            "classname": "Activation",
+            "idx": 125,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5a_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5a_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 126,
+            "output_shape": [
+                [
+                    "?",
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5a_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5a_se_reshape",
+            "classname": "Reshape",
+            "idx": 127,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5a_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5a_se_reduce",
+            "classname": "Conv2D",
+            "idx": 128,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    20
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5a_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5a_se_expand",
+            "classname": "Conv2D",
+            "idx": 129,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5a_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5a_se_excite",
+            "classname": "Multiply",
+            "idx": 130,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    480
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5a_activation",
+                    0
+                ],
+                [
+                    "block5a_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5a_project_conv",
+            "classname": "Conv2D",
+            "idx": 131,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    112
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5a_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5a_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 132,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    112
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5a_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_expand_conv",
+            "classname": "Conv2D",
+            "idx": 133,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5a_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 134,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_expand_activation",
+            "classname": "Activation",
+            "idx": 135,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 136,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_bn",
+            "classname": "BatchNormalization",
+            "idx": 137,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_activation",
+            "classname": "Activation",
+            "idx": 138,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 139,
+            "output_shape": [
+                [
+                    "?",
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_se_reshape",
+            "classname": "Reshape",
+            "idx": 140,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_se_reduce",
+            "classname": "Conv2D",
+            "idx": 141,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    28
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_se_expand",
+            "classname": "Conv2D",
+            "idx": 142,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_se_excite",
+            "classname": "Multiply",
+            "idx": 143,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_activation",
+                    0
+                ],
+                [
+                    "block5b_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_project_conv",
+            "classname": "Conv2D",
+            "idx": 144,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    112
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 145,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    112
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_drop",
+            "classname": "Dropout",
+            "idx": 146,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    112
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5b_add",
+            "classname": "Add",
+            "idx": 147,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    112
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_drop",
+                    0
+                ],
+                [
+                    "block5a_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_expand_conv",
+            "classname": "Conv2D",
+            "idx": 148,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5b_add",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 149,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_expand_activation",
+            "classname": "Activation",
+            "idx": 150,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 151,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_bn",
+            "classname": "BatchNormalization",
+            "idx": 152,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_activation",
+            "classname": "Activation",
+            "idx": 153,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 154,
+            "output_shape": [
+                [
+                    "?",
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_se_reshape",
+            "classname": "Reshape",
+            "idx": 155,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_se_reduce",
+            "classname": "Conv2D",
+            "idx": 156,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    28
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_se_expand",
+            "classname": "Conv2D",
+            "idx": 157,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_se_excite",
+            "classname": "Multiply",
+            "idx": 158,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_activation",
+                    0
+                ],
+                [
+                    "block5c_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_project_conv",
+            "classname": "Conv2D",
+            "idx": 159,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    112
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 160,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    112
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_drop",
+            "classname": "Dropout",
+            "idx": 161,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    112
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block5c_add",
+            "classname": "Add",
+            "idx": 162,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    112
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_drop",
+                    0
+                ],
+                [
+                    "block5b_add",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_expand_conv",
+            "classname": "Conv2D",
+            "idx": 163,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block5c_add",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 164,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_expand_activation",
+            "classname": "Activation",
+            "idx": 165,
+            "output_shape": [
+                [
+                    "?",
+                    14,
+                    14,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_dwconv_pad",
+            "classname": "ZeroPadding2D",
+            "idx": 166,
+            "output_shape": [
+                [
+                    "?",
+                    17,
+                    17,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 167,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_dwconv_pad",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_bn",
+            "classname": "BatchNormalization",
+            "idx": 168,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_activation",
+            "classname": "Activation",
+            "idx": 169,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 170,
+            "output_shape": [
+                [
+                    "?",
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_se_reshape",
+            "classname": "Reshape",
+            "idx": 171,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_se_reduce",
+            "classname": "Conv2D",
+            "idx": 172,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    28
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_se_expand",
+            "classname": "Conv2D",
+            "idx": 173,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_se_excite",
+            "classname": "Multiply",
+            "idx": 174,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    672
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_activation",
+                    0
+                ],
+                [
+                    "block6a_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_project_conv",
+            "classname": "Conv2D",
+            "idx": 175,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6a_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 176,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_expand_conv",
+            "classname": "Conv2D",
+            "idx": 177,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6a_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 178,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_expand_activation",
+            "classname": "Activation",
+            "idx": 179,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 180,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_bn",
+            "classname": "BatchNormalization",
+            "idx": 181,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_activation",
+            "classname": "Activation",
+            "idx": 182,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 183,
+            "output_shape": [
+                [
+                    "?",
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_se_reshape",
+            "classname": "Reshape",
+            "idx": 184,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_se_reduce",
+            "classname": "Conv2D",
+            "idx": 185,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    48
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_se_expand",
+            "classname": "Conv2D",
+            "idx": 186,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_se_excite",
+            "classname": "Multiply",
+            "idx": 187,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_activation",
+                    0
+                ],
+                [
+                    "block6b_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_project_conv",
+            "classname": "Conv2D",
+            "idx": 188,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 189,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_drop",
+            "classname": "Dropout",
+            "idx": 190,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6b_add",
+            "classname": "Add",
+            "idx": 191,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_drop",
+                    0
+                ],
+                [
+                    "block6a_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_expand_conv",
+            "classname": "Conv2D",
+            "idx": 192,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6b_add",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 193,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_expand_activation",
+            "classname": "Activation",
+            "idx": 194,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 195,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_bn",
+            "classname": "BatchNormalization",
+            "idx": 196,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_activation",
+            "classname": "Activation",
+            "idx": 197,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 198,
+            "output_shape": [
+                [
+                    "?",
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_se_reshape",
+            "classname": "Reshape",
+            "idx": 199,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_se_reduce",
+            "classname": "Conv2D",
+            "idx": 200,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    48
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_se_expand",
+            "classname": "Conv2D",
+            "idx": 201,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_se_excite",
+            "classname": "Multiply",
+            "idx": 202,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_activation",
+                    0
+                ],
+                [
+                    "block6c_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_project_conv",
+            "classname": "Conv2D",
+            "idx": 203,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 204,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_drop",
+            "classname": "Dropout",
+            "idx": 205,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6c_add",
+            "classname": "Add",
+            "idx": 206,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_drop",
+                    0
+                ],
+                [
+                    "block6b_add",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_expand_conv",
+            "classname": "Conv2D",
+            "idx": 207,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6c_add",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 208,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_expand_activation",
+            "classname": "Activation",
+            "idx": 209,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 210,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_bn",
+            "classname": "BatchNormalization",
+            "idx": 211,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_activation",
+            "classname": "Activation",
+            "idx": 212,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 213,
+            "output_shape": [
+                [
+                    "?",
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_se_reshape",
+            "classname": "Reshape",
+            "idx": 214,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_se_reduce",
+            "classname": "Conv2D",
+            "idx": 215,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    48
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_se_expand",
+            "classname": "Conv2D",
+            "idx": 216,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_se_excite",
+            "classname": "Multiply",
+            "idx": 217,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_activation",
+                    0
+                ],
+                [
+                    "block6d_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_project_conv",
+            "classname": "Conv2D",
+            "idx": 218,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 219,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_drop",
+            "classname": "Dropout",
+            "idx": 220,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block6d_add",
+            "classname": "Add",
+            "idx": 221,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    192
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_drop",
+                    0
+                ],
+                [
+                    "block6c_add",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block7a_expand_conv",
+            "classname": "Conv2D",
+            "idx": 222,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block6d_add",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block7a_expand_bn",
+            "classname": "BatchNormalization",
+            "idx": 223,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block7a_expand_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block7a_expand_activation",
+            "classname": "Activation",
+            "idx": 224,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block7a_expand_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block7a_dwconv",
+            "classname": "DepthwiseConv2D",
+            "idx": 225,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block7a_expand_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block7a_bn",
+            "classname": "BatchNormalization",
+            "idx": 226,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block7a_dwconv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block7a_activation",
+            "classname": "Activation",
+            "idx": 227,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block7a_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block7a_se_squeeze",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 228,
+            "output_shape": [
+                [
+                    "?",
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block7a_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block7a_se_reshape",
+            "classname": "Reshape",
+            "idx": 229,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block7a_se_squeeze",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block7a_se_reduce",
+            "classname": "Conv2D",
+            "idx": 230,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    48
+                ]
+            ],
+            "inbound": [
+                [
+                    "block7a_se_reshape",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block7a_se_expand",
+            "classname": "Conv2D",
+            "idx": 231,
+            "output_shape": [
+                [
+                    "?",
+                    1,
+                    1,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block7a_se_reduce",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block7a_se_excite",
+            "classname": "Multiply",
+            "idx": 232,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1152
+                ]
+            ],
+            "inbound": [
+                [
+                    "block7a_activation",
+                    0
+                ],
+                [
+                    "block7a_se_expand",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block7a_project_conv",
+            "classname": "Conv2D",
+            "idx": 233,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    320
+                ]
+            ],
+            "inbound": [
+                [
+                    "block7a_se_excite",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "block7a_project_bn",
+            "classname": "BatchNormalization",
+            "idx": 234,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    320
+                ]
+            ],
+            "inbound": [
+                [
+                    "block7a_project_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "top_conv",
+            "classname": "Conv2D",
+            "idx": 235,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1280
+                ]
+            ],
+            "inbound": [
+                [
+                    "block7a_project_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "top_bn",
+            "classname": "BatchNormalization",
+            "idx": 236,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1280
+                ]
+            ],
+            "inbound": [
+                [
+                    "top_conv",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "top_activation",
+            "classname": "Activation",
+            "idx": 237,
+            "output_shape": [
+                [
+                    "?",
+                    7,
+                    7,
+                    1280
+                ]
+            ],
+            "inbound": [
+                [
+                    "top_bn",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "avg_pool",
+            "classname": "GlobalAveragePooling2D",
+            "idx": 238,
+            "output_shape": [
+                [
+                    "?",
+                    1280
+                ]
+            ],
+            "inbound": [
+                [
+                    "top_activation",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "top_dropout",
+            "classname": "Dropout",
+            "idx": 239,
+            "output_shape": [
+                [
+                    "?",
+                    1280
+                ]
+            ],
+            "inbound": [
+                [
+                    "avg_pool",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "predictions",
+            "classname": "Dense",
+            "idx": 240,
+            "output_shape": [
+                [
+                    "?",
+                    1000
+                ]
+            ],
+            "inbound": [
+                [
+                    "top_dropout",
+                    0
+                ]
+            ]
+        },
+        {
+            "name": "OUTPUT",
+            "classname": "OUTPUT",
+            "idx": 241,
+            "output_shape": null,
+            "inbound": [
+                [
+                    "predictions",
+                    0
+                ]
+            ]
+        }
+    ]
+}
